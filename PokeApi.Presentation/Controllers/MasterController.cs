@@ -33,8 +33,8 @@ namespace PokeApi.Presentation.Controllers
                 MasterId = request.MasterId
             };
 
-            await _masterService.CapturePokemonAsync(capturedPokemon);
-            return Ok();
+            var result = await _masterService.CapturePokemonAsync(capturedPokemon);
+            return Ok(result);
         }
 
         [HttpGet("captured")]

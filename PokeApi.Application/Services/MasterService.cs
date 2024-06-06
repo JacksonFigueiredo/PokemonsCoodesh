@@ -1,5 +1,7 @@
 ﻿using PokeApi.Domain.Interfaces;
 using PokeApi.Domain.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PokeApi.Application.Services
 {
@@ -14,34 +16,37 @@ namespace PokeApi.Application.Services
 
         public async Task<OperationResult<Master>> CreateMasterAsync(Master master)
         {
-            if (!Domain.Utils.CpfValidator.IsValidCpf(master.Cpf))
-            {
-                return OperationResult<Master>.FailureResult("Invalid CPF");
-            }
-
             var existingMaster = await _masterRepository.GetMasterByCpfAsync(master.Cpf);
             if (existingMaster != null)
             {
-                return OperationResult<Master>.FailureResult("There is already a master with this CPF.");
+                return OperationResult<Master>.FailureResult("A master with the same CPF already exists.");
             }
 
-            return await _masterRepository.CreateMasterAsync(master);
+            if (!Domain.Utils.CpfValidator.IsValidCpf(master.Cpf))
+            {
+                return OperationResult<Master>.FailureResult("Invalid CPF.");
+            }
+
+            await _masterRepository.CreateMasterAsync(master);
+            return OperationResult<Master>.SuccessResult(master);
         }
 
         public async Task<OperationResult<CapturedPokemon>> CapturePokemonAsync(CapturedPokemon capturedPokemon)
         {
-            var capturedPokemons = await _masterRepository.GetCapturedPokemonsAsync();
-            if (capturedPokemons.Data.Any(cp => cp.PokemonId == capturedPokemon.PokemonId && cp.MasterId == capturedPokemon.MasterId))
+            var existingCapture = await _masterRepository.GetCapturedPokemonAsync(capturedPokemon.MasterId, capturedPokemon.PokemonId);
+            if (existingCapture != null)
             {
-                return OperationResult<CapturedPokemon>.FailureResult("The Pokémon has already been captured by the master.");
+                return OperationResult<CapturedPokemon>.FailureResult("This Pokémon has already been captured by the master.");
             }
 
-            return await _masterRepository.CapturePokemonAsync(capturedPokemon);
+            await _masterRepository.CapturePokemonAsync(capturedPokemon);
+            return OperationResult<CapturedPokemon>.SuccessResult(capturedPokemon);
         }
 
         public async Task<OperationResult<IEnumerable<CapturedPokemon>>> GetCapturedPokemonsAsync()
         {
-            return await _masterRepository.GetCapturedPokemonsAsync();
+            var capturedPokemons = await _masterRepository.GetCapturedPokemonsAsync();
+            return OperationResult<IEnumerable<CapturedPokemon>>.SuccessResult(capturedPokemons);
         }
     }
 }

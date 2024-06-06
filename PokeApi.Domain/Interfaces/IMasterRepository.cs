@@ -7,5 +7,6 @@ namespace PokeApi.Domain.Interfaces
         Task<OperationResult<Master>> CreateMasterAsync(Master master);
         Task<OperationResult<CapturedPokemon>> CapturePokemonAsync(CapturedPokemon capturedPokemon);
         Task<OperationResult<IEnumerable<CapturedPokemon>>> GetCapturedPokemonsAsync();
+        Task<Master> GetMasterByCpfAsync(string cpf);
     }
 }

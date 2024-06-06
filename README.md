@@ -1,49 +1,155 @@
-# Backend Challenge - Pokémons
-
-## Introdução
-
-Este é um teste para que possamos ver as suas habilidades como Front Developer.
-
-Nesse teste você deverá desenvolver um projeto para listar pokémons, utilizando como base a API [https://pokeapi.co/](https://pokeapi.co/ "https://pokeapi.co/").
-
-[SPOILER] As instruções de entrega e apresentação do teste estão no final deste Readme (=
-
-### Antes de começar
- 
-- O projeto deve utilizar a Linguagem específica na avaliação. Por exempo: C#
-- Considere como deadline da avaliação a partir do início do teste. Caso tenha sido convidado a realizar o teste e não seja possível concluir dentro deste período, avise a pessoa que o convidou para receber instruções sobre o que fazer.
-- Documentar todo o processo de investigação para o desenvolvimento da atividade (README.md no seu repositório); os resultados destas tarefas são tão importantes do que o seu processo de pensamento e decisões à medida que as completa, por isso tente documentar e apresentar os seus hipóteses e decisões na medida do possível.
-
-## Backend-end
-
-- Get para 10 Pokémon aleatórios
-- GetByID para 1 Pokémon específico
-- Cadastro do mestre pokemon (dados básicos como nome, idade e cpf) em SQLite4 - Post para informar que um Pokémon foi capturado.5 - Listagem dos Pokémon já capturados.
-  
-
-### Requisitos
-
-1 - Todas elas devem retornar os dados básicos do Pokémon, suas evoluções e o base64 de sprite default de cada Pokémon.
+Titulo : PokeApi Master Trainer
 
 
-## Readme do Repositório
+Descrição sobre o Projeto
 
-- Deve conter o título do projeto
-- Uma descrição sobre o projeto em frase
-- Deve conter uma lista com linguagem, framework e/ou tecnologias usadas
-- Como instalar e usar o projeto (instruções)
-- Não esqueça o [.gitignore](https://www.toptal.com/developers/gitignore)
-- Se está usando github pessoal, referencie que é um challenge by coodesh:  
+Um sistema para gerenciar mestres Pokémon e capturas de Pokémon usando dados da PokeApi.
 
->  This is a challenge by [Coodesh](https://coodesh.com/)
+Lista com Linguagem, Framework e/ou Tecnologias Usadas
 
-## Finalização e Instruções para a Apresentação
+    Linguagem: C#
+    Framework: .NET Core
+    Banco de Dados: In-memory database
+    APIs Externas: PokeApi
+    Bibliotecas: Entity Framework Core, Newtonsoft.Json
+    Ferramentas: Visual Studio, dotnet CLI
 
-1. Adicione o link do repositório com a sua solução no teste
-2. Adicione o link da apresentação do seu projeto no README.md.
-3. Verifique se o Readme está bom e faça o commit final em seu repositório;
-4. Envie e aguarde as instruções para seguir. Sucesso e boa sorte. =)
+Passos para Instalação
 
-## Suporte
+     Clone o repositório:
+     git clone https://github.com/seu-usuario/pokeapi-master-trainer.git
+     cd pokeapi-master-trainer
 
-Use a [nossa comunidade](https://discord.gg/rdXbEvjsWu) para tirar dúvidas sobre o processo ou envie uma mensagem diretamente a um especialista no chat da plataforma. 
+Restaure as dependências do projeto: dotnet restore
+     Compile o projeto: dotnet build
+
+
+Passos para Executar o Projeto
+     Inicie o projeto: dotnet run --project PokeApi.Presentation
+
+Acesse a API:
+     A API estará disponível em https://localhost:5001 ou http://localhost:5000.
+
+Endpoints Disponíveis
+
+Criar um Mestre Pokémon:
+        URL: POST /api/master
+        Descrição: Cria um novo mestre Pokémon.
+        Body:
+
+        json
+
+    {
+        "name": "Ash Ketchum",
+        "age": 10,
+        "cpf": "12345678901"
+    }
+
+    Resposta: Retorna os dados do mestre criado.
+
+Capturar um Pokémon:
+
+    URL: POST /api/master/capture
+    Descrição: Captura um Pokémon para um mestre específico.
+    Body:
+
+    json
+
+    {
+        "pokemonId": 25,
+        "masterId": 1
+    }
+
+    Resposta: Retorna os dados da captura realizada.
+
+Listar Pokémon Capturados:
+
+    URL: GET /api/master/captured
+    Descrição: Lista todos os Pokémon capturados pelos mestres.
+    Resposta: Retorna uma lista de todos os Pokémon capturados.
+
+Obter 10 Pokémon Aleatórios:
+
+    URL: GET /api/pokemon/random
+    Descrição: Retorna 10 Pokémon selecionados aleatoriamente.
+    Resposta:
+
+    json
+
+    [
+      {
+        "id": 1,
+        "name": "bulbasaur",
+        "baseExperience": 64,
+        "spriteBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+      },
+      {
+        "id": 4,
+        "name": "charmander",
+        "baseExperience": 62,
+        "spriteBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+      },
+      ...
+    ]
+
+Obter Pokémon por Nome:
+
+    URL: GET /api/pokemon/by-name/{name}
+    Descrição: Retorna os dados de um Pokémon específico baseado no seu nome.
+    Parâmetro de Rota:
+        name: O nome do Pokémon a ser buscado.
+    Resposta:
+
+    json
+
+    {
+        "id": 25,
+        "name": "pikachu",
+        "baseExperience": 112,
+        "spriteBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+    }
+
+    Status de Resposta: Retorna 404 Not Found se o Pokémon não for encontrado.
+
+    
+
+Obter Pokémon por ID:
+
+    URL: GET /api/pokemon/by-id/{id}
+    Descrição: Retorna os dados de um Pokémon específico baseado no seu ID.
+    Parâmetro de Rota:
+        id: O ID do Pokémon a ser buscado.
+    Resposta:
+
+    json
+
+        {
+            "id": 25,
+            "name": "pikachu",
+            "baseExperience": 112,
+            "spriteBase64": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA..."
+        }
+
+        Status de Resposta: Retorna 404 Not Found se o Pokémon não for encontrado.
+
+Obter 10 Pokémon Aleatórios:
+        Faça uma requisição GET para /api/pokemon/random para receber uma lista de 10 Pokémon aleatórios.
+        Exemplo de Requisição:
+
+         curl -X GET "https://localhost:5001/api/pokemon/random"
+
+Obter Pokémon por Nome:
+
+    Faça uma requisição GET para /api/pokemon/by-name/{name}, substituindo {name} pelo nome do Pokémon desejado.
+    Exemplo de Requisição:
+         
+         curl -X GET "https://localhost:5001/api/pokemon/by-name/pikachu"
+
+Obter Pokémon por ID:
+
+    Faça uma requisição GET para /api/pokemon/by-id/{id}, substituindo {id} pelo ID do Pokémon desejado.
+    Exemplo de Requisição:
+
+     curl -X GET "https://localhost:5001/api/pokemon/by-id/25"
+
+Challenge by Coodesh

@@ -13,8 +13,5 @@ namespace PokeApi.Domain.Models
 
         [JsonProperty("version")]
         public Version Version { get; set; }
-
-        public int PokemonId { get; set; }
-        public Pokemon Pokemon { get; set; }
     }
 }

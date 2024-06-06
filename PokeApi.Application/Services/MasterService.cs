@@ -8,10 +8,12 @@ namespace PokeApi.Application.Services
     public class MasterService
     {
         private readonly IMasterRepository _masterRepository;
+        private readonly IPokeApiService _pokeApiService;
 
-        public MasterService(IMasterRepository masterRepository)
+        public MasterService(IMasterRepository masterRepository, IPokeApiService pokeApiService)
         {
             _masterRepository = masterRepository;
+            _pokeApiService = pokeApiService;
         }
 
         public async Task<OperationResult<Master>> CreateMasterAsync(Master master)
@@ -39,7 +41,16 @@ namespace PokeApi.Application.Services
                 return OperationResult<CapturedPokemon>.FailureResult("This Pokémon has already been captured by the master.");
             }
 
-            await _masterRepository.EnsurePokemonExistsAsync(capturedPokemon.Pokemon);
+            var pokemonResult = await _pokeApiService.GetPokemonAsync(capturedPokemon.PokemonId.ToString());
+            if (!pokemonResult.Success || pokemonResult.Data == null)
+            {
+                return OperationResult<CapturedPokemon>.FailureResult("Failed to fetch Pokemon data from PokeApi.");
+            }
+
+            var pokemon = pokemonResult.Data;
+            pokemon.SpriteBase64 = await ConvertImageToBase64(pokemon.Sprites?.FrontDefault ?? string.Empty);
+
+            capturedPokemon.Pokemon = pokemon;
 
             await _masterRepository.CapturePokemonAsync(capturedPokemon);
             return OperationResult<CapturedPokemon>.SuccessResult(capturedPokemon);
@@ -49,6 +60,18 @@ namespace PokeApi.Application.Services
         {
             var capturedPokemons = await _masterRepository.GetCapturedPokemonsAsync();
             return OperationResult<IEnumerable<CapturedPokemon>>.SuccessResult(capturedPokemons);
+        }
+
+        private async Task<string> ConvertImageToBase64(string imageUrl)
+        {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                return string.Empty;
+            }
+
+            using var httpClient = new HttpClient();
+            var imageBytes = await httpClient.GetByteArrayAsync(imageUrl);
+            return Convert.ToBase64String(imageBytes);
         }
     }
 }

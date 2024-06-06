@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PokeApi.Application.Services;
 using PokeApi.Domain.Models;
-using PokeApi.Presentation.Dto.PokeApi.Domain.Models;
 using PokeApi.Presentation.Dto;
-using System.Threading.Tasks;
+using PokeApi.Presentation.Dto.PokeApi.Domain.Models;
 
 namespace PokeApi.Presentation.Controllers
 {

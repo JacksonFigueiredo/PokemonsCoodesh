@@ -21,9 +21,15 @@ namespace PokeApi.Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Master> GetMasterByCpfAsync(string cpf)
+        public async Task<Master?> GetMasterByCpfAsync(string cpf)
         {
             return await _context.Masters.SingleOrDefaultAsync(m => m.Cpf == cpf);
+        }
+
+        public async Task<CapturedPokemon?> GetCapturedPokemonAsync(int masterId, int pokemonId)
+        {
+            return await _context.CapturedPokemons
+                .SingleOrDefaultAsync(cp => cp.MasterId == masterId && cp.PokemonId == pokemonId);
         }
 
         public async Task CapturePokemonAsync(CapturedPokemon capturedPokemon)
@@ -31,18 +37,12 @@ namespace PokeApi.Infrastructure.Repositories
             var existingPokemon = await _context.Pokemons.FindAsync(capturedPokemon.PokemonId);
             if (existingPokemon == null)
             {
-                _context.Pokemons.Add(capturedPokemon.Pokemon);
+                _context.Pokemons.Add(capturedPokemon.Pokemon!);
                 await _context.SaveChangesAsync();
             }
 
             _context.CapturedPokemons.Add(capturedPokemon);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<CapturedPokemon> GetCapturedPokemonAsync(int masterId, int pokemonId)
-        {
-            return await _context.CapturedPokemons
-                .SingleOrDefaultAsync(cp => cp.MasterId == masterId && cp.PokemonId == pokemonId);
         }
 
         public async Task<IEnumerable<CapturedPokemon>> GetCapturedPokemonsAsync()

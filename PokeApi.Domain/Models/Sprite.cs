@@ -12,6 +12,6 @@ namespace PokeApi.Domain.Models
         public string FrontDefault { get; set; }
 
         public int PokemonId { get; set; }
-        public Pokemon Pokemon { get; set; }
+
     }
 }

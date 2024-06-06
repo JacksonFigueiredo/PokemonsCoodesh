@@ -31,16 +31,8 @@ namespace PokeApi.Infrastructure
                 .HasForeignKey(ai => ai.AbilityId);
 
             modelBuilder.Entity<GameIndices>().HasKey(gi => gi.Id);
-            modelBuilder.Entity<GameIndices>()
-                .HasOne(gi => gi.Pokemon)
-                .WithMany(p => p.GameIndices)
-                .HasForeignKey(gi => gi.PokemonId);
 
             modelBuilder.Entity<Sprite>().HasKey(s => s.Id);
-            modelBuilder.Entity<Sprite>()
-                .HasOne(s => s.Pokemon)
-                .WithOne(p => p.Sprites)
-                .HasForeignKey<Sprite>(s => s.PokemonId);
 
             modelBuilder.Entity<Domain.Models.Version>().HasKey(v => v.Id);
 

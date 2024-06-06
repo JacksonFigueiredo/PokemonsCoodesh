@@ -28,6 +28,13 @@ namespace PokeApi.Infrastructure.Repositories
 
         public async Task CapturePokemonAsync(CapturedPokemon capturedPokemon)
         {
+            var existingPokemon = await _context.Pokemons.FindAsync(capturedPokemon.PokemonId);
+            if (existingPokemon == null)
+            {
+                _context.Pokemons.Add(capturedPokemon.Pokemon);
+                await _context.SaveChangesAsync();
+            }
+
             _context.CapturedPokemons.Add(capturedPokemon);
             await _context.SaveChangesAsync();
         }
@@ -43,6 +50,16 @@ namespace PokeApi.Infrastructure.Repositories
             return await _context.CapturedPokemons
                 .Include(cp => cp.Pokemon)
                 .ToListAsync();
+        }
+
+        public async Task EnsurePokemonExistsAsync(Pokemon pokemon)
+        {
+            var existingPokemon = await _context.Pokemons.FindAsync(pokemon.Id);
+            if (existingPokemon == null)
+            {
+                _context.Pokemons.Add(pokemon);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

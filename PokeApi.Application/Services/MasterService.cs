@@ -39,6 +39,8 @@ namespace PokeApi.Application.Services
                 return OperationResult<CapturedPokemon>.FailureResult("This Pokémon has already been captured by the master.");
             }
 
+            await _masterRepository.EnsurePokemonExistsAsync(capturedPokemon.Pokemon);
+
             await _masterRepository.CapturePokemonAsync(capturedPokemon);
             return OperationResult<CapturedPokemon>.SuccessResult(capturedPokemon);
         }

@@ -1,6 +1,4 @@
 ﻿using PokeApi.Domain.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace PokeApi.Domain.Interfaces
 {
@@ -11,5 +9,6 @@ namespace PokeApi.Domain.Interfaces
         Task CapturePokemonAsync(CapturedPokemon capturedPokemon);
         Task<CapturedPokemon> GetCapturedPokemonAsync(int masterId, int pokemonId);
         Task<IEnumerable<CapturedPokemon>> GetCapturedPokemonsAsync();
+        Task EnsurePokemonExistsAsync(Pokemon pokemon);
     }
 }

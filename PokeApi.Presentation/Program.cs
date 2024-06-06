@@ -13,7 +13,7 @@ builder.Services.AddHttpClient();
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("DataSource=:memory:"));
+    options.UseInMemoryDatabase("PokeApiDb"));
 
 
 builder.Services.AddScoped<IMasterRepository, MasterRepository>();
@@ -26,7 +26,6 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.OpenConnection();
     dbContext.Database.EnsureCreated();
 }
 

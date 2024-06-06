@@ -22,7 +22,6 @@ namespace PokeApi.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configurar chave primária e relacionamentos
             modelBuilder.Entity<Ability>()
                 .HasKey(a => a.Id);
 

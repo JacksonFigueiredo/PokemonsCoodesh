@@ -17,7 +17,7 @@ Lista com Linguagem, Framework e/ou Tecnologias Usadas
 Passos para Instalação
 
      Clone o repositório:
-     git clone https://github.com/jacksonfigueiredo/pokeapi-master-trainer.git
+     git clone [https://github.com/jacksonfigueiredo/pokeapi-master-trainer.git](https://github.com/JacksonFigueiredo/PokemonsCoodesh.git)
      cd pokeapi-master-trainer
 
 Restaure as dependências do projeto: dotnet restore
